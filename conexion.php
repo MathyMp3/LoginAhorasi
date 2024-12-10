@@ -1,11 +1,12 @@
 <?php
 $servidor = 'localhost';
 $usuario = 'root';
-$contrasena = '';
+$contraseña = '';
 $base_datos = 'registros';
-$conexion = new mysqli($servidor, $usuario, $contrasena,
-$base_datos);
+
+$conexion = new mysqli($servidor, $usuario, $contraseña, $base_datos);
+
 if ($conexion->connect_error) {
-die('Error de conexion: ' . $conexion->connect_error);
+    die('Error de conexión: ' . $conexion->connect_error);
 }
 ?>
