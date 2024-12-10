@@ -16,7 +16,7 @@ required>
 <label>
 <p>Contrase~na</p>
 <input type="password" name="password"
-placeholder="Contrasena" required>
+placeholder="Contraseña" required>
 </label>
 <br>
 <input type="submit" value="Registrarse">
