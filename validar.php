@@ -1,24 +1,37 @@
 <?php
 session_start();
 if (isset($_POST['usuario']) && isset($_POST['password'])) {
-include 'conexion.php';
-$usuario = $conexion->real_escape_string($_POST['usuario']);
-$password = $conexion->real_escape_string($_POST['password']);
-$query = "SELECT password FROM usuarios
-WHERE nombre = '$usuario'";
-$resultado = $conexion->query($query);
-if ($resultado && $resultado->num_rows > 0) {
-$fila = $resultado->fetch_assoc();
-if (password_verify($password, $fila['password'])) {
-$_SESSION['usuario'] = $usuario;
-header('Location: principal.php');
-} else {
-echo "Contrasena incorrecta. <a href='./'>Volver</a>";
-}
-} else {
-echo "Usuario no encontrado. <a href='./'>Volver</a>";
-}
-} else {
-    header('Location: ./');
+    include 'conexion.php';
+    $usuario = mysqli_real_escape_string($conexion, $_POST['usuario']);
+    $password = $_POST['password'];
+
+    $consulta = "SELECT u.*, c.nombre AS categoria
+                 FROM usuarios u
+                 JOIN categoria c ON u.categoria_id = c.id
+                 WHERE u.nombre = '$usuario'";
+    $resultado = $conexion->query($consulta);
+
+    if ($resultado->num_rows > 0) {
+        $usuario_datos = $resultado->fetch_assoc();
+        if (password_verify($password, $usuario_datos['password'])) {
+            $_SESSION['usuario'] = $usuario;
+            $_SESSION['categoria'] = $usuario_datos['categoria'];
+            switch ($usuario_datos['categoria']) {
+                case 'avanzado':
+                    echo 1;
+                    break;
+                case 'medio':
+                    echo 2;
+                    break;
+                case 'básico':
+                    echo 3;
+                    break;
+            }
+        } else {
+            echo 0; // Contraseña incorrecta
+        }
+    } else {
+        echo 0; // Usuario no encontrado
+    }
 }
 ?>
