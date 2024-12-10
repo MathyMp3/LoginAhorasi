@@ -2,24 +2,46 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Inicio de Sesion</title>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<form action="validar.php" method="post">
-<label>
-<p>Nombre de Usuario</p>
-<input type="text" name="usuario"
-placeholder="Usuario" required>
-</label>
-<br>
-<label>
-<p>Contrase~na</p>
-<input type="password" name="password"
-placeholder="Contrase~na" required>
-</label>
-<br>
-<input type="submit" value="Iniciar Sesion">
-</form>
+    <h1>Sistema de Login</h1>
+    <form id="loginForm">
+        <label>Usuario:</label>
+        <input type="text" id="usuario" required><br>
+        <label>Contraseña:</label>
+        <input type="password" id="password" required><br>
+        <button type="button" onclick="confirmar()">Iniciar Sesión</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        function confirmar() {
+            var user = $('#usuario').val();
+            var pass = $('#password').val();
+            $.ajax({
+                url: 'validar.php',
+                type: 'POST',
+                data: { usuario: user, password: pass },
+                success: function(resp) {
+                    switch (parseInt(resp)) {
+                        case 1:
+                            location.href = './principal_avanzado.php';
+                            break;
+                        case 2:
+                            location.href = './principal_medio.php';
+                            break;
+                        case 3:
+                            location.href = './principal_basico.php';
+                            break;
+                        default:
+                            $("#result").html("<strong>¡Error!</strong> Usuario o contraseña incorrectos.");
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
